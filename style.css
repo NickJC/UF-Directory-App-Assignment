@@ -3,6 +3,24 @@
 }
 
 .tableWrapper {
-  max-height: 400px;
+  max-height: 600px;
   overflow: auto;
+}
+
+h1{
+    color: #00FF00;
+}
+
+
+
+.rowt {
+    background-color: #DF01D7;
+}
+.jumbotron{
+    background-color: #DF01D7;
+    
+}
+
+h2{
+    color: #00FF00;
 }
