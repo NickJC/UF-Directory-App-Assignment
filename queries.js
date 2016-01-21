@@ -14,22 +14,7 @@ var findLibraryWest = function(db, callback) {
     //Find the document that contains data corresponding to Library West,
     //then log it to the console. 
    //console.log('Hey dude');
-   /*
-mongoose.connect(config.db.uri, function(err, listing) {
-  if (err) throw err;
-
-   Listing.find({code: 'LBW'},function(listing){
-    if (err) throw err;
-
-    console.log(listing);
-
- });
-
-
-
-});
-*/
-
+   
 var cursor =db.collection('listings').find({code: "LBW"});
    cursor.each(function(err, doc) {
       assert.equal(err, null);
@@ -42,36 +27,45 @@ var cursor =db.collection('listings').find({code: "LBW"});
 
 };
 
-/*
-var removeCable = function() {
-  /*
-    Find the document with the code 'CABL'. This cooresponds with courses that can only be viewed 
-    on cable TV. Since we live in the 21st century and most courses are now web based, go ahead
-    and remove this listing from your database and log the document to the console. 
+
+var removeCable = function(db, callback) {
+  
+    //Find the document with the code 'CABL'. This cooresponds with courses that can only be viewed 
+    //on cable TV. Since we live in the 21st century and most courses are now web based, go ahead
+    //and remove this listing from your database and log the document to the console. 
    
-   Listing.find({code: 'CABL'},function(err,listing){
-listing.remove(function(listing){console.log('deleted');
-      });
+  
+   db.collection('listings').deleteOne(
+      { code: "CABL" },
+      function(err, results) {
+         console.log(results);
+         callback();
+      }
+   );
+};
+
+var updatePhelpsMemorial = function(db, callback) {
+  
+  //  Phelps Memorial Hospital Center's address is incorrect. Find the listing, update it, and then 
+    //log the updated document to the console. 
+   
+   
+
+db.collection('listings').updateOne(
+      { code : "PHL" },
+      {
+        $set: { address: "University of Florida, Gainesville,FL 32603" }
+      }, function(err, results) {
+      console.log(results);
+      callback();
    });
 };
-var updatePhelpsMemorial = function() {
-  /*
-    Phelps Memorial Hospital Center's address is incorrect. Find the listing, update it, and then 
-    log the updated document to the console. 
-   
-   Listing.find({code:'PHL'},{address: 'Gainesville,FL'},function(err,listing){
-    console.log(listing);
-   });
-};
-*/
+
 var retrieveAllListings = function(db, callback) {
   
   //  Retrieve all listings in the database, and log them to the console. 
    
-   //Listing.find({},function(err,listings){
-    //if(err) throw err;
-    //console.log(listings);
-   //});
+   
   var cursor =db.collection('listings').find( );
    cursor.each(function(err, doc) {
       assert.equal(err, null);
@@ -83,15 +77,29 @@ var retrieveAllListings = function(db, callback) {
    });
 };
 
-//findLibraryWest();
-console.log('done');
-//removeCable();
-//updatePhelpsMemorial();
+
 MongoClient.connect(config.db.uri, function(err, db) {
   assert.equal(null, err);
 findLibraryWest(db,function(){
   db.close;
 });
+});
+
+
+MongoClient.connect(config.db.uri, function(err, db) {
+  assert.equal(null, err);
+removeCable(db,function(){
+  db.close;
+});
+});
+
+
+MongoClient.connect(config.db.uri, function(err, db) {
+  assert.equal(null, err);
+
+  updatePhelpsMemorial(db, function() {
+      db.close();
+  });
 });
 
 
