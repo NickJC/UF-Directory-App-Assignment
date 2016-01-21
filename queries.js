@@ -8,12 +8,13 @@ var config = require('./config');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-/*
-var findLibraryWest = function() {
+
+var findLibraryWest = function(db, callback) {
   
     //Find the document that contains data corresponding to Library West,
     //then log it to the console. 
-   console.log('Hey dude');
+   //console.log('Hey dude');
+   /*
 mongoose.connect(config.db.uri, function(err, listing) {
   if (err) throw err;
 
@@ -21,15 +22,26 @@ mongoose.connect(config.db.uri, function(err, listing) {
     if (err) throw err;
 
     console.log(listing);
+
  });
 
 
 
 });
+*/
 
+var cursor =db.collection('listings').find({code: "LBW"});
+   cursor.each(function(err, doc) {
+      assert.equal(err, null);
+      if (doc != null) {
+         console.log(doc);
+      } else {
+         callback();
+      }
+   });
 
 };
-*/
+
 /*
 var removeCable = function() {
   /*
@@ -75,6 +87,14 @@ var retrieveAllListings = function(db, callback) {
 console.log('done');
 //removeCable();
 //updatePhelpsMemorial();
+MongoClient.connect(config.db.uri, function(err, db) {
+  assert.equal(null, err);
+findLibraryWest(db,function(){
+  db.close;
+});
+});
+
+
 MongoClient.connect(config.db.uri, function(err, db) {
   assert.equal(null, err);
 retrieveAllListings(db,function(){
